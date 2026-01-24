@@ -16,49 +16,20 @@ const Login = () => {
     }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const res = await axios.post(
-  //       "https://my-portfolio-backend-e8l7.onrender.com/user/login",
-  //       formData,
-  //       {
-  //         withCredentials: true,
-  //       },
-  //     );
-  //     // console.log("response", res);
-  //     // window.location.href = "/";
-  //     // // navigate("/");
-  //     if (res.data.message === "Login successful") {
-  //       navigate("/"); // redirect
-  //     } else {
-  //       alert(res.data.message || "Login failed");
-  //     }
-  //   } catch (err) {
-  //     console.log("login page error", err);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("sending payload", formData); // ✅ always prints
-
     try {
-      const res = await axios.post(
-        "https://my-portfolio-backend-e8l7.onrender.com/user/login",
+      await axios.post(
+        "https://my-portfolio-frontend.onrender.com/user/login",
         formData,
-        { withCredentials: true },
+        {
+          withCredentials: true,
+        },
       );
-
-      console.log("response data", res.data);
-
-      if (res.data.message === "Login successful") {
-        navigate("/");
-      } else {
-        alert(res.data.message || "Login failed");
-      }
+      window.location.href = "/";
+      // navigate("/");
     } catch (err) {
-      console.error("login error", err.response?.data || err.message); // ✅ prints if request fails
+      console.log("login page error", err);
     }
   };
 

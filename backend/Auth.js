@@ -51,32 +51,33 @@ router.post("/login", async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRY },
     );
 
+    res.cookie("jwt", token, {
+      httpOnly: true, // ❌ Blocks XSS
+      secure: true, // 🔒 HTTPS only
+      sameSite: "none", // 🛡️ CSRF protection
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+    res.cookie("role", user.role, {
+      httpOnly: false, // readable by frontend
+      secure: true, // set true in production
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     // res.cookie("jwt", token, {
-    //   httpOnly: true, // ❌ Blocks XSS
-    //   secure: true, // 🔒 HTTPS only
-    //   sameSite: "none", // 🛡️ CSRF protection
-    //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    // });
-    // res.cookie("role", user.role, {
-    //   httpOnly: false, // readable by frontend
-    //   secure: true, // set true in production
+    //   httpOnly: true,
+    //   secure: false,
     //   sameSite: "none",
     //   maxAge: 7 * 24 * 60 * 60 * 1000,
     // });
 
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: true, // ✅ required for HTTPS
-      sameSite: "none", // ✅ required for cross-site
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
+    // res.cookie("role", user.role, {
+    //   httpOnly: true,
+    //   secure: false,
+    //   sameSite: "none",
+    //   maxAge: 7 * 24 * 60 * 60 * 1000,
+    // });
 
-    res.cookie("role", user.role, {
-      httpOnly: false,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
     // res.json({ token });
     res.json({ message: "Login successful" });
 
