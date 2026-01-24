@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import "./Portfolio.css";
 // import axios from "axios";
 import { motion } from "framer-motion";
