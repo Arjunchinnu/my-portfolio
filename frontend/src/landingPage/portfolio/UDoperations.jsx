@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Cookies from "js-cookie";
-import "./Portfolio.css";
+import "./portfolio.css";
 
 const UDoperations = ({ id, onDelete }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
