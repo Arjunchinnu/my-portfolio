@@ -1,9 +1,8 @@
-import "./Portfolio.css";
-// import axios from "axios";
 import { motion } from "framer-motion";
 
 import UDoperations from "./UDoperations";
 import { Routes, Route } from "react-router-dom";
+import "./portfolio.css";
 
 const Portfolio = ({ data, setData }) => {
   // useEffect(() => {
