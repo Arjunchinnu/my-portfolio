@@ -38,7 +38,7 @@ const PostData = ({ onProjectAdded }) => {
     data.append("projectUrl", formData.projectUrl);
     data.append("image", formData.image);
 
-    await axios.post("http://localhost:5000/postProject", data);
+    await axios.post("https://my-portfolio-backend-e8l7.onrender.com/postProject", data);
 
     setFormData({
       projectName: "",
