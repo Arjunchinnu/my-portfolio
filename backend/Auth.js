@@ -31,6 +31,7 @@ router.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
     const user = await User.findOne({ username: username });
+    console.log("user :", user);
 
     if (!user) {
       return res.status(400).json({ message: "user not found" });
@@ -50,19 +51,32 @@ router.post("/login", async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRY },
     );
 
+    // res.cookie("jwt", token, {
+    //   httpOnly: true, // ❌ Blocks XSS
+    //   secure: true, // 🔒 HTTPS only
+    //   sameSite: "none", // 🛡️ CSRF protection
+    //   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    // });
+    // res.cookie("role", user.role, {
+    //   httpOnly: false, // readable by frontend
+    //   secure: true, // set true in production
+    //   sameSite: "none",
+    //   maxAge: 7 * 24 * 60 * 60 * 1000,
+    // });
+
     res.cookie("jwt", token, {
-      httpOnly: true, // ❌ Blocks XSS
-      secure: false, // 🔒 HTTPS only
-      sameSite: "strict", // 🛡️ CSRF protection
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
-    res.cookie("role", user.role, {
-      httpOnly: false, // readable by frontend
-      secure: false, // set true in production
-      sameSite: "strict",
+      httpOnly: true,
+      secure: true, // ✅ required for HTTPS
+      sameSite: "none", // ✅ required for cross-site
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
+    res.cookie("role", user.role, {
+      httpOnly: false,
+      secure: true,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
     // res.json({ token });
     res.json({ message: "Login successful" });
 

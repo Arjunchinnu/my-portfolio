@@ -27,9 +27,14 @@ connectDB();
 const app = express();
 
 // Middleware
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://my-portfolio-frontend.onrender.com",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: allowedOrigins,
     credentials: true,
   }),
 );
@@ -48,12 +53,10 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
-
 //uploading project route
 app.post("/postProject", (req, res) => {
   upload.single("image")(req, res, async (err) => {
     try {
-
       // console.log("posting route detected");
       // console.log("posted data:", req.body);
       // console.log("uploaded file:", req.file);
@@ -179,6 +182,4 @@ app.post("/logout", auth, (req, res) => {
   res.status(200).json({ message: "Logged out successfully" });
 });
 
-
 module.exports = app;
-
