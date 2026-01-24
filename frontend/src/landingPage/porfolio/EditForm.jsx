@@ -20,7 +20,7 @@ const EditForm = () => {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/edit/${projectId}`);
+        const res = await axios.get(`https://my-portfolio-backend-e8l7.onrender.com/edit/${projectId}`);
         const project = res.data.data;
         setFormData({
           projectName: project.projectName,
@@ -55,7 +55,7 @@ const EditForm = () => {
     data.append("image", formData.image);
 
     try {
-      await axios.put(`http://localhost:5000/edit/${projectId}`, data, {
+      await axios.put(`https://my-portfolio-backend-e8l7.onrender.com/edit/${projectId}`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
