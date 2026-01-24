@@ -1,0 +1,289 @@
+body {
+  padding: 0;
+  margin: 0;
+  /* height: 100vh; */
+  box-sizing: border-box;
+  background-color: rgb(25, 30, 32);
+}
+#particles-js {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+
+/* navbar */
+
+/* position: sticky;
+  top: 0;
+  padding: 10px;
+  z-index: 1000; */
+
+.navbar {
+  background: linear-gradient(90deg, #0f1113, #171d1f);
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+.navbar.sticky {
+  background: linear-gradient(90deg, #0f1113, #171d1f);
+  position: sticky;
+  top: 0;
+  padding: 10px;
+  z-index: 1000;
+}
+.nav-link {
+  color: whitesmoke !important;
+  margin-right: 1.8rem !important;
+}
+.nav-link:hover {
+  color: rgb(26, 88, 129) !important;
+}
+
+/* hero */
+
+body {
+  font-family: "Poppins", sans-serif;
+}
+
+/* arjun */
+.hero-small-name {
+  font-weight: 300; /* light */
+  letter-spacing: 0.3rem;
+  margin: 0;
+}
+
+/* Krishnamurthy */
+.hero-main-name {
+  font-weight: 800; /* extra bold */
+  font-size: 3rem;
+  letter-spacing: 0.3rem;
+}
+/* 
+web developer */
+.hero-subtitle {
+  font-weight: 400;
+  font-size: 0.9rem;
+  letter-spacing: 0.34rem;
+  text-transform: uppercase;
+}
+
+/* type writer effect */
+
+.type-writer .heading1 {
+  display: flex;
+  justify-content: start;
+  max-width: 100%;
+}
+.type-writer .heading2 {
+  display: flex;
+  justify-content: start;
+  max-width: 100%;
+}
+
+.type-writer .heading3 {
+  display: flex;
+  max-width: 45%;
+}
+
+/* .type-writer h1,
+.type-writer h2 {
+  margin-inline: auto;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 1px solid;
+  animation:
+    typing 3s steps(18) forwards,
+    blink 1s step-end infinite,
+    removeCursor 0.1s forwards 4s;
+} */
+.type-writer h3 {
+  margin-inline: auto;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 1px solid;
+  animation:
+    typing 3s steps(18) infinite,
+    blink 1s step-end infinite;
+}
+
+@keyframes typing {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+
+  /* 100% {
+    border-color: transparent;
+  } */
+}
+@keyframes removeCursor {
+  to {
+    border-right: none;
+  }
+}
+
+/* .hero {
+  background-image: url("./assets/hero1.png");
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  width: 100vw;
+} */
+/* .hero-data {
+  display: flex;
+  justify-content: start;
+} */
+
+.hero {
+  height: 100vh;
+}
+
+.hero-btn {
+  font-size: 12px;
+  border-radius: 10px;
+  text-align: center;
+  margin: 0;
+  padding: 3px 2rem;
+}
+.resume-btn {
+  /* display: flex;
+  justify-content: end; */
+}
+.portfolio-btn {
+  display: flex;
+  justify-content: start;
+  margin-left: 3rem;
+}
+
+/* social media icons */
+.social-media {
+  display: flex;
+  gap: 1rem;
+  padding: 5rem;
+  padding-top: 6rem;
+}
+
+.social-media i {
+  color: aliceblue !important;
+  font-size: 1.4em !important;
+}
+
+.social-media i {
+  transition: all 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth elastic curve */
+  color: rgba(34, 139, 34, 0.9); /* Forest green base */
+}
+
+.social-media i:hover {
+  color: rgb(26, 88, 129) !important;
+  cursor: pointer;
+  transform: translateY(-0.25rem) scale(1.2); /* Lift + grow */
+  margin-top: -1rem;
+
+  font-size: 1.8rem !important; /* Keep if needed */
+}
+
+ 
+
+
+
+/* Mobile phones */
+@media (max-width: 576px) {
+  .container {
+    flex-direction: column;
+    font-size: 14px;
+  }
+}
+
+/* Tablets */
+@media (max-width: 768px) {
+  .hero-small-name {
+    font-size: 1rem;
+  }
+  .hero-main-name {
+    font-size: 2rem;
+  }
+  .type-writer .heading3 {
+    max-width: 51%;
+  }
+  .hero-btns {
+    display: flex;
+    font-size: 1rem;
+    gap: 1rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .hero-small-name {
+    font-size: 2.3rem;
+  }
+  .hero-main-name {
+    font-size: 2.45rem;
+  }
+  .type-writer .heading3 {
+    max-width: 51%;
+  }
+  .hero-btns {
+    display: flex;
+    gap: 1rem;
+  }
+}
+/* 
+.hero-small-name {
+  font-weight: 300; 
+  letter-spacing: 0.3rem;
+  margin: 0;
+}
+
+.hero-main-name {
+  font-weight: 800; 
+  font-size: 3rem;
+  letter-spacing: 0.3rem;
+}
+
+.hero-subtitle {
+  font-weight: 400;
+  font-size: 0.9rem;
+  letter-spacing: 0.34rem;
+  text-transform: uppercase;
+} */
+
+/* Small laptops */
+/* @media (max-width: 992px) {
+  .type-writer .heading1 {
+    max-width: 40%;
+  }
+  .type-writer .heading2 {
+    max-width: 100%;
+    letter-spacing: 0.2rem;
+    font-weight: 100;
+  }
+  .type-writer .heading1 .hero-main-name {
+    font-size: 2rem;
+  }
+} */
+
+/* .type-writer .heading1 {
+  display: flex;
+  justify-content: start;
+  max-width: 28%;
+}
+.type-writer .heading2 {
+  display: flex;
+  justify-content: start;
+  max-width: 90%;
+}
+
+.type-writer .heading3 {
+  display: flex;
+  max-width: 45%;
+} */

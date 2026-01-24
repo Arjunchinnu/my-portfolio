@@ -1,0 +1,140 @@
+* {
+  padding: 0;
+  margin: 0;
+  color: white;
+}
+/* .form-range{
+    font-size: 15px!important;
+} */
+
+.skill-range {
+  -webkit-appearance: none; /* Remove default style */
+  appearance: none;
+  width: 50%;
+  height: 2px;
+  background: whitesmoke; /* Track color */
+  border-radius: 5px;
+}
+
+.skill-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  cursor: pointer;
+
+  background: radial-gradient(circle at center, whitesmoke 40%, transparent 41%)
+    no-repeat;
+  border: 2px solid whitesmoke;
+}
+
+.skill-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #4caf50;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.skills p,
+.language p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* .skill-range {
+  flex: 0 0 150px; /* fixed width for sliders 
+}*/
+.skill-icon-box {
+  border: 2px solid white;
+  border-radius: 5px;
+  padding: 0.4rem;
+}
+/* .skills p input {
+  flex: 1;
+} */
+
+.skill-item {
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.education-path {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+}
+.circle {
+  height: 80px;
+  width: 80px;
+  background-color: rgb(69, 69, 129);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.line {
+  width: 100%;
+  height: 3rem;
+  border-left: 2px solid white;
+  margin-left: 2.5rem;
+}
+.education-summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.wticando {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2rem;
+}
+
+@media (max-width: 992px) {
+  /* Adjust skill range width for smaller screens */
+  .skill-range {
+    width: 100%;   /* full width instead of 50% */
+  }
+
+  /* Stack skill items vertically */
+  .skill-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  /* Reduce circle size for education path */
+  .circle {
+    height: 60px;
+    width: 60px;
+    font-size: 0.9rem; /* shrink text inside */
+  }
+
+  /* Adjust line spacing */
+  .line {
+    margin-left: 1.5rem;
+    height: 2rem;
+  }
+
+  /* Education summary text alignment */
+  .education-summary {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  /* Reduce margin for wticando section */
+  .wticando {
+    margin-left: 1rem;
+  }
+
+  /* Make skill icon boxes smaller */
+  .skill-icon-box {
+    padding: 0.3rem;
+    border-width: 1px;
+  }
+}

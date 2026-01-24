@@ -1,0 +1,9 @@
+.upload-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-row .btn{
+   align-self: center;
+}
