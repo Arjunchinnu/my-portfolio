@@ -18,7 +18,9 @@ function App() {
   // Fetch projects from backend
   const fetchProjects = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/displayProjects");
+      const res = await axios.get(
+        "https://my-portfolio-backend-e8l7.onrender.com/displayProjects",
+      );
       setProjects(res.data.data);
     } catch (err) {
       console.error("Error fetching projects:", err);

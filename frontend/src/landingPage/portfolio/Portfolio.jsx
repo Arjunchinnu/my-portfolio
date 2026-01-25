@@ -7,6 +7,7 @@ import { Routes, Route } from "react-router-dom";
 import "./portfolio.css";
 
 const Portfolio = ({ data, setData }) => {
+  
   // useEffect(() => {
   //   const el = document.getElementById("portfolio");
   //   if (el) {

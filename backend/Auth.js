@@ -52,15 +52,16 @@ router.post("/login", async (req, res) => {
     );
 
     res.cookie("jwt", token, {
-      httpOnly: true, // ❌ Blocks XSS
-      secure: true, // 🔒 HTTPS only
-      sameSite: "none", // 🛡️ CSRF protection
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      httpOnly: true, // keep this true for security
+      secure: true, // ✅ must be true on HTTPS
+      sameSite: "none", // ✅ required for cross‑site cookies
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
+
     res.cookie("role", user.role, {
-      httpOnly: false, // readable by frontend
-      secure: true, // set true in production
-      sameSite: "none",
+      httpOnly: false, // frontend can read role
+      secure: true, // ✅ must be true on HTTPS
+      sameSite: "none", // ✅ required for cross‑site cookies
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
