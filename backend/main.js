@@ -34,7 +34,7 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: "https://my-portfolio-frontend-yz4e.onrender.com",
     credentials: true,
   }),
 );
