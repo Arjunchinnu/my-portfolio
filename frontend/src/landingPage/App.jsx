@@ -21,7 +21,7 @@ function App() {
       const res = await axios.get(
         "https://my-portfolio-backend-e8l7.onrender.com/displayProjects",
       );
-      setProjects(res.data);
+      setProjects(res.data.data);
     } catch (err) {
       console.error("Error fetching projects:", err);
     }
