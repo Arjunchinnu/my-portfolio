@@ -53,6 +53,10 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
+app.get("/auth/check", (req, res) => {
+  res.json({ cookies: req.cookies });
+});
+
 //uploading project route
 app.post("/postProject", (req, res) => {
   upload.single("image")(req, res, async (err) => {

@@ -26,7 +26,9 @@ const Navbar = () => {
   // Check login status on mount
   useEffect(() => {
     const role = Cookies.get("role");
+    const jwt = Cookies.get("jwt");
     console.log("Role cookie:", role);
+    console.log("jwt cookie:", jwt);
     setIsLoggedIn(!!role);
     if (role) setUserRole(role);
   }, []);

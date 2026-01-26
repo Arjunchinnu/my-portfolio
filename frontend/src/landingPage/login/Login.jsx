@@ -19,13 +19,14 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
+      let res = await axios.post(
         "https://my-portfolio-backend-e8l7.onrender.com/user/login",
         formData,
         {
           withCredentials: true,
         },
       );
+      console.log(res.data);
       window.location.href = "/";
       // navigate("/");
     } catch (err) {
