@@ -24,7 +24,7 @@ const Navbar = () => {
       setIsLoggedIn(res.data.authenticated);
       setUserRole(res.data.role || "user");
     } catch (err) {
-      console.log("❌ Not logged in");
+      console.log("❌ Not logged in", err);
       setIsLoggedIn(false);
       setUserRole("user");
     } finally {
