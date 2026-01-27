@@ -29,7 +29,6 @@ const Login = () => {
         },
       );
 
-
       localStorage.setItem("jwt", res.data.token);
       localStorage.setItem("role", res.data.user.role);
 
@@ -47,12 +46,24 @@ const Login = () => {
       style={{ minHeight: "100vh" }}
     >
       <form
-        className="p-4 border rounded shadow"
+        className="p-4 border rounded shadow position-relative"
         style={{ width: "100%", maxWidth: "400px" }}
         onSubmit={handleSubmit}
       >
-        <h2 className="text-center mb-4">Login</h2>
+        <button
+          type="button"
+          className="btn btn-primary position-absolute top-0 start-0 mt-3 ms-3"
+          onClick={() => {
+            navigate("/");
+          }}
+          style={{ zIndex: 10 }}
+        >
+          ← Back
+        </button>
 
+        <h2 className="text-center mb-4 mt-5">Login</h2>
+
+        {/* Rest of your form fields remain the same */}
         <div className="mb-3">
           <label htmlFor="username" className="form-label">
             Username

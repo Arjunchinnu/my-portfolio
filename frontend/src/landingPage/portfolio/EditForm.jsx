@@ -85,7 +85,7 @@ const EditForm = () => {
               navigate("/#portfolio");
             }}
           >
-            Back
+            ← Back
           </button>
         </div>
       </div>
