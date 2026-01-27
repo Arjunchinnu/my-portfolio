@@ -9,10 +9,11 @@ const UDoperations = ({ id, onDelete }) => {
   const [userRole, setUserRole] = useState("user");
 
   useEffect(() => {
-
-    // const token = localStorage.getItem("jwt");
+    const token = localStorage.getItem("jwt");
     const role = localStorage.getItem("role") || "user";
-    if (role) {
+    console.log("portfolio btn auth", { token: !!token, role });
+
+    if (token) {
       setIsLoggedIn(true);
       setUserRole(role);
     } else {
