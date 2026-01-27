@@ -30,7 +30,7 @@ const Hero = () => {
             </div>
           </div>
           <div className="row mt-5 px-5 hero-btns">
-            <div className="col-6">
+            <div className="col-4">
               <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-md-start">
                 <a
                   href="#resume"

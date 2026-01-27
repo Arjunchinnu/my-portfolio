@@ -12,7 +12,6 @@ const Navbar = () => {
     const token = localStorage.getItem("jwt");
     const role = localStorage.getItem("role") || "user";
 
-
     if (token) {
       setIsLoggedIn(true);
       setUserRole(role);
@@ -59,9 +58,11 @@ const Navbar = () => {
           data-bs-target="#navbarNavAltMarkup"
         >
           <span
-            className="navbar-toggler-icon "
-            style={{ color: "white" }}
-          ></span>
+          // className="navbar-toggler-icon "
+          // style={{ color: "white!important" }}
+          >
+            <i class="fa-solid fa-bars"></i>
+          </span>
         </button>
 
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">

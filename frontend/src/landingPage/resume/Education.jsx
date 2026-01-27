@@ -12,7 +12,7 @@ const Education = () => {
         </h2>
         <div>
           <div className="education-path">
-            <div className="circle">2023</div>{" "}
+            <div className="circle">2027</div>{" "}
             <p style={{ fontSize: "14px", marginLeft: "20px" }}>
               NAGARJUNA COLLEGE <br />
               <span style={{ fontSize: "11px" }}>chikkamarali, Banglore</span>
@@ -60,7 +60,7 @@ const Education = () => {
           <p style={{ fontSize: "14px", textAlign: "center" }}>
             BCA in Computer Science,
             <br />
-            Narajuna College
+            Nagarjuna College
           </p>
         </div>
 
