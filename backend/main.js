@@ -71,7 +71,15 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 app.get("/auth/check", (req, res) => {
-  res.json({ cookies: req.cookies });
+  console.log("Auth check - Cookies:", req.cookies); // Render logs
+  const isAuthenticated = !!req.cookies.jwt;
+  const userRole = req.cookies.role || "user";
+
+  res.json({
+    authenticated: isAuthenticated,
+    role: userRole,
+    cookies: req.cookies, // For debugging
+  });
 });
 
 //uploading project route

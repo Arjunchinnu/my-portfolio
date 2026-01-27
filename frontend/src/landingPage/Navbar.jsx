@@ -43,21 +43,22 @@ const Navbar = () => {
     const checkAuth = async () => {
       try {
         const res = await axios.get(
-          "https://my-portfolio-backend-e8l7.onrender.com/user/login",
+          "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
           {
             withCredentials: true,
           },
         );
-        console.log("Auth check:", res.data);
-        if (res.data.cookies?.jwt && res.data.cookies?.role) {
-          setIsLoggedIn(true);
-          setUserRole(res.data.cookies.role);
-        }
+        console.log("✅ Auth status:", res.data);
+
+        setIsLoggedIn(res.data.authenticated);
+        setUserRole(res.data.role || "user");
       } catch (err) {
-        console.log("Not logged in", err);
+        console.log("❌ Not logged in", err);
         setIsLoggedIn(false);
+        setUserRole("user");
       }
     };
+
     checkAuth();
   }, []);
 
