@@ -2,84 +2,82 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-axios.defaults.withCredentials = true;
-
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("user");
   const [isSticky, setIsSticky] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
-  // SIMPLE AUTH CHECK
-  // const checkAuth = async () => {
-  //   try {
-  //     const res = await axios.get(
-  //       "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
-  //       {
-  //         withCredentials: true,
-  //       },
-  //     );
-  //     console.log("Auth:", res.data);
-  //     setIsLoggedIn(res.data.authenticated);
-  //     setUserRole(res.data.role);
-  //   } catch (err) {
-  //     console.error("Auth check failed:", err);
-  //     setIsLoggedIn(false);
-  //     setUserRole("user");
-  //   }
-  // };
+  // 🔥 FIXED AUTH CHECK - Uses localStorage + Authorization header
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        // Get token from localStorage
+        const token = localStorage.getItem("jwt");
+        const storedRole = localStorage.getItem("role");
+
+        // Set initial state from localStorage
+        if (token && storedRole) {
+          setIsLoggedIn(true);
+          setUserRole(storedRole);
+        }
+
+        // Verify with backend
         const res = await axios.get(
           "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
           {
-            withCredentials: true,
-            timeout: 15000, // 15 seconds for Render wake-up
+            headers: {
+              Authorization: token ? `Bearer ${token}` : "",
+            },
+            timeout: 15000,
           },
         );
-        console.log("Auth:", res);
-        // setIsLoggedIn(res.data.authenticated);
-        // setUserRole(res.data.role);
+
+        console.log("✅ Auth response:", res.data);
+        setIsLoggedIn(res.data.authenticated);
+        setUserRole(res.data.role);
       } catch (err) {
-        if (err.code === "ECONNABORTED") {
-          console.log("Backend sleeping, retrying...");
-          setTimeout(checkAuth, 5000); // Retry in 5s
-        } else {
-          console.log("Not logged in");
-          setIsLoggedIn(false);
-          setUserRole("user");
-        }
+        console.error(
+          "❌ Auth check failed:",
+          err.response?.data || err.message,
+        );
+        // Keep localStorage state as fallback
+        const token = localStorage.getItem("jwt");
+        const role = localStorage.getItem("role") || "user";
+        setIsLoggedIn(!!token);
+        setUserRole(role);
       }
     };
 
     checkAuth();
   }, []);
 
+  // 🔥 FIXED LOGOUT - Clears localStorage
   const logout = () => {
+    // Clear localStorage
+    localStorage.removeItem("jwt");
+    localStorage.removeItem("role");
+
+    // Reset state
+    setIsLoggedIn(false);
+    setUserRole("user");
+
+    // Optional backend cleanup
     axios
       .post(
         "https://my-portfolio-backend-e8l7.onrender.com/logout",
         {},
         {
-          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+          },
         },
       )
-      .then(() => {
-        window.location.href = "/";
-      });
+      .catch(() => {}); // Ignore errors
+
+    window.location.href = "/";
   };
 
-  // useEffect(() => {
-  //   console.log("🔄 RENDER ->", { isLoggedIn, userRole });
-  // }, [isLoggedIn, userRole]);
-
-  // Check auth when component loads
-  // useEffect(() => {
-  //   checkAuth();
-  // }, []);
-
-  // Sticky scroll
+  // Sticky scroll effect
   useEffect(() => {
     const handleScroll = () => {
       setIsSticky(window.scrollY > 50);

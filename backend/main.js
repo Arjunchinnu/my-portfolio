@@ -64,32 +64,27 @@ const upload = multer({ storage });
 // });app.get("/auth/check", (req, res) => {
 
 app.get("/auth/check", (req, res) => {
-  console.log("Auth check - Cookies:", req.cookies);
-
   try {
-    const token = req.cookies.jwt;
-    let decoded = null;
+    const token = req.cookies.jwt || req.headers.authorization?.split(" ")[1];
 
-    if (token) {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    if (!token) {
+      return res.json({
+        authenticated: false,
+        role: req.cookies.role || "user",
+        cookies: req.cookies,
+      });
     }
 
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
     res.json({
-      authenticated: !!decoded, // ✅ TRUE only if token VALID
-      role: req.cookies.role || "user", // Fallback to cookie
-      validToken: !!decoded, // Debug token status
-      cookies: req.cookies,
-      userId: decoded?.id || null,
+      authenticated: true,
+      role: decoded.role || req.cookies.role || "user",
+      userId: decoded.id,
+      validToken: true,
     });
   } catch (err) {
-    console.log("Token invalid:", err.message);
-    res.json({
-      authenticated: false,
-      role: req.cookies.role || "user",
-      validToken: false,
-      tokenError: err.message,
-      cookies: req.cookies,
-    });
+    res.json({ authenticated: false, role: "user" });
   }
 });
 
@@ -221,24 +216,11 @@ app.delete("/delete/:id", async (req, res) => {
 
 //   res.status(200).json({ message: "Logged out successfully" });
 // });
-
 app.post("/logout", (req, res) => {
-  // Clear JWT cookie
-  res.clearCookie("jwt", {
-    httpOnly: true,
-    secure: false, // match login
-    sameSite: "lax",
-    path: "/", // must match login
+  res.status(200).json({
+    message: "Logged out successfully",
+    clearStorage: true,
   });
-
-  // Clear role cookie
-  res.clearCookie("role", {
-    httpOnly: false,
-    secure: false, // match login
-    sameSite: "lax",
-    path: "/", // must match login
-  });
-
-  res.status(200).json({ message: "Logged out successfully" });
 });
+
 module.exports = app;

@@ -100,7 +100,7 @@ router.post("/login", async (req, res) => {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
 
-    console.log("👤 LOGIN USER:", user?.username);
+    console.log("LOGIN USER:", user?.username);
 
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(400).json({ message: "Invalid credentials" });
@@ -112,28 +112,17 @@ router.post("/login", async (req, res) => {
       { expiresIn: "24h" },
     );
 
-    // 🔥 NUCLEAR COOKIE FIX - FORCE EVERY SETTING
-    res.append(
-      "Set-Cookie",
-      `jwt=${token}; HttpOnly; Path=/; Max-Age=86400; SameSite=Lax`,
-    );
-    res.append(
-      "Set-Cookie",
-      `role=${user.role}; Path=/; Max-Age=86400; SameSite=Lax`,
-    );
+    console.log("🔑 TOKEN:", token.slice(0, 20) + "...");
 
-    console.log(
-      " COOKIES FORCED:",
-      `jwt=${token.slice(0, 20)}..., role=${user.role}`,
-    );
-
+    // 🔥 SEND TOKEN IN RESPONSE BODY - BYPASS COOKIES
     res.json({
       success: true,
       message: "Login successful",
+      token, // Frontend stores this manually
       user: { id: user._id, role: user.role },
     });
   } catch (err) {
-    console.error(" LOGIN ERROR:", err);
+    console.error("LOGIN ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });

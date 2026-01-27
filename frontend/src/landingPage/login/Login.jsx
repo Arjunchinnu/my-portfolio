@@ -16,24 +16,6 @@ const Login = () => {
     }));
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     let res = await axios.post(
-  //       "https://my-portfolio-backend-e8l7.onrender.com/user/login",
-  //       formData,
-  //       {
-  //         withCredentials: true,
-  //       },
-  //     );
-  //     console.log(res.data);
-  //     // window.location.href = "/";
-  //     navigate("/");
-  //   } catch (err) {
-  //     console.log("login page error", err);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -41,18 +23,21 @@ const Login = () => {
         "https://my-portfolio-backend-e8l7.onrender.com/user/login",
         formData,
         {
-          withCredentials: true,
           headers: {
             "Content-Type": "application/json",
           },
         },
       );
-      console.log("Login success:", res.data);
-      // window.location.href = "/";
+
+      console.log("✅ Login success:", res.data);
+
+      localStorage.setItem("jwt", res.data.token);
+      localStorage.setItem("role", res.data.user.role);
+
       navigate("/");
     } catch (err) {
-      console.error("Login error details:", err.response?.data || err.message);
-      // Add user feedback: alert(err.response?.data?.message || "Login failed");
+      console.error("❌ Login error:", err.response?.data || err.message);
+      alert(err.response?.data?.message || "Login failed");
     }
   };
 
@@ -93,7 +78,7 @@ const Login = () => {
             Password
           </label>
           <div className="input-group">
-            <div className="input-group-text">* &nbsp;</div>
+            <div className="input-group-text">* </div>
             <input
               type="password"
               className="form-control"
@@ -110,7 +95,7 @@ const Login = () => {
         <div className="text-center">
           <button
             type="submit"
-            className="btn  w-100"
+            className="btn w-100"
             style={{ backgroundColor: "rgb(69, 69, 129)", color: "white" }}
           >
             Login
