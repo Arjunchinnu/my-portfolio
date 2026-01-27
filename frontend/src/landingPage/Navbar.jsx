@@ -11,15 +11,30 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("user");
 
+  // const logout = async () => {
+  //   try {
+  //     await axios.post("/logout");
+  //     console.log("✅ Logout successful");
+  //   } catch (err) {
+  //     console.error("Logout failed:", err);
+  //   }
+
+  //   Cookies.remove("role");
+  //   window.location.href = "/";
+  // };
+
   const logout = async () => {
     try {
-      await axios.post("/logout");
-      console.log("✅ Logout successful");
+      await axios.post(
+        "https://my-portfolio-backend-e8l7.onrender.com/logout",
+        {},
+        {
+          withCredentials: true,
+        },
+      );
     } catch (err) {
-      console.error("Logout failed:", err);
+      console.log("login error", err);
     }
-
-    Cookies.remove("role");
     window.location.href = "/";
   };
 
