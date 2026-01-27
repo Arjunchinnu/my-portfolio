@@ -52,13 +52,13 @@ router.post("/login", async (req, res) => {
     );
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // false local, true prod
+      secure: process.env.NODE_ENV === "production" ? true : false,
       sameSite: "lax", // ✅ Change to "lax" (not "none")
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     res.cookie("role", user.role, {
       httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV === "production" ? true : false,
       sameSite: "lax", // Match
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
