@@ -38,7 +38,10 @@ const PostData = ({ onProjectAdded }) => {
     data.append("projectUrl", formData.projectUrl);
     data.append("image", formData.image);
 
-    await axios.post("https://my-portfolio-backend-e8l7.onrender.com/postProject", data);
+    await axios.post(
+      "https://my-portfolio-backend-e8l7.onrender.com/postProject",
+      data,
+    );
 
     setFormData({
       projectName: "",
@@ -48,13 +51,10 @@ const PostData = ({ onProjectAdded }) => {
       image: null,
     });
 
-    // navigate("/#portfolio");
     window.location.href = "/#portfolio";
 
-    // refresh portfolio
     if (onProjectAdded) onProjectAdded();
 
-    // optional: scroll to portfolio section
     document
       .getElementById("portfolio")
       ?.scrollIntoView({ behavior: "smooth" });
