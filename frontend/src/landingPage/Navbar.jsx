@@ -63,7 +63,10 @@ const Navbar = () => {
           aria-controls="navbarNavAltMarkup"
           aria-expanded="false"
           aria-label="Toggle navigation"
-        ></button>
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
         <div
           className="collapse navbar-collapse nav-items-div"
           id="navbarNavAltMarkup"
