@@ -53,12 +53,25 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
+// app.get("/auth/check", (req, res) => {
+//   console.log("Auth check - Cookies:", req.cookies);
+//   res.json({
+//     authenticated: !!req.cookies.jwt, // ← ADD THIS
+//     role: req.cookies.role || "user", // ← ADD THIS
+//     cookies: req.cookies, // Keep for debug
+//   });
+// });app.get("/auth/check", (req, res) => {
+
 app.get("/auth/check", (req, res) => {
   console.log("Auth check - Cookies:", req.cookies);
+
+  const authenticated = !!req.cookies.jwt; // TRUE if jwt exists
+  const role = req.cookies.role || "user";
+
   res.json({
-    authenticated: !!req.cookies.jwt, // ← ADD THIS
-    role: req.cookies.role || "user", // ← ADD THIS
-    cookies: req.cookies, // Keep for debug
+    authenticated, // Now TRUE with jwt cookie
+    role,
+    cookies: req.cookies,
   });
 });
 

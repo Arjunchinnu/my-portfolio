@@ -11,20 +11,22 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   // SIMPLE AUTH CHECK
-  const checkAuth = () => {
-    axios
-      .get("https://my-portfolio-backend-e8l7.onrender.com/auth/check", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log("Auth:", res.data);
-        setIsLoggedIn(res.data.authenticated);
-        setUserRole(res.data.role);
-      })
-      .catch(() => {
-        setIsLoggedIn(false);
-        setUserRole("user");
-      });
+  const checkAuth = async () => {
+    try {
+      const res = await axios.get(
+        "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
+        {
+          withCredentials: true,
+        },
+      );
+      console.log("Auth:", res.data);
+      setIsLoggedIn(res.data.authenticated);
+      setUserRole(res.data.role);
+    } catch (err) {
+      console.error("Auth check failed:", err);
+      setIsLoggedIn(false);
+      setUserRole("user");
+    }
   };
 
   const logout = () => {
