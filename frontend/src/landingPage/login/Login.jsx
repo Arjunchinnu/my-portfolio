@@ -48,8 +48,8 @@ const Login = () => {
         },
       );
       console.log("Login success:", res.data);
-      window.location.href = "/";
-      // navigate("/");
+      // window.location.href = "/";
+      navigate("/");
     } catch (err) {
       console.error("Login error details:", err.response?.data || err.message);
       // Add user feedback: alert(err.response?.data?.message || "Login failed");
