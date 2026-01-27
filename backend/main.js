@@ -27,31 +27,14 @@ connectDB();
 const app = express();
 
 // Middleware
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://my-portfolio-frontend-yz4e.onrender.com", // ← EXACT frontend URL
-];
-
-// app.use(
-//   cors({
-//     origin: "https://my-portfolio-frontend-yz4e.onrender.com",
-//     credentials: true,
-//   }),
-// );
 
 app.use(
   cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
+    origin: [
+      "http://localhost:5173",
+      "https://my-portfolio-frontend-yz4e.onrender.com",
+    ],
     credentials: true,
-    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"], // Add Content-Type
-    optionsSuccessStatus: 200,
   }),
 );
 

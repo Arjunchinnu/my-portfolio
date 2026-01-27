@@ -26,7 +26,7 @@ const Navbar = () => {
   const logout = async () => {
     try {
       await axios.post(
-        "https://my-portfolio-backend-e8l7.onrender.com/logout",
+        "/logout",
         {},
         {
           withCredentials: true,
