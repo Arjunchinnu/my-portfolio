@@ -9,8 +9,9 @@ const UDoperations = ({ id, onDelete }) => {
   const [userRole, setUserRole] = useState("user");
 
   useEffect(() => {
-    const role = Cookies.get("role");
 
+    // const token = localStorage.getItem("jwt");
+    const role = localStorage.getItem("role") || "user";
     if (role) {
       setIsLoggedIn(true);
       setUserRole(role);
@@ -22,7 +23,9 @@ const UDoperations = ({ id, onDelete }) => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this project?")) {
       try {
-        await axios.delete(`http://localhost:5000/delete/${id}`);
+        await axios.delete(
+          `https://my-portfolio-backend-e8l7.onrender.com/delete/${id}`,
+        );
 
         if (onDelete) {
           onDelete(id);

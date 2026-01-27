@@ -32,6 +32,7 @@ const Navbar = () => {
           setIsLoggedIn(!!token); // Fallback
           setUserRole(role);
         });
+      console.log(isLoggedIn, userRole);
     }
   }, []);
 
@@ -49,7 +50,6 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-  console.log(isLoggedIn, userRole);
 
   return (
     <nav className={`navbar navbar-expand-lg ${isSticky ? "sticky" : ""}`}>
