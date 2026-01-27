@@ -27,8 +27,8 @@ const Login = () => {
         },
       );
       console.log(res.data);
-      window.location.href = "/";
-      // navigate("/");
+      // window.location.href = "/";
+      navigate("/");
     } catch (err) {
       console.log("login page error", err);
     }
