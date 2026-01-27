@@ -38,9 +38,9 @@ const Navbar = () => {
             timeout: 15000, // 15 seconds for Render wake-up
           },
         );
-        console.log("Auth:", res.data);
-        setIsLoggedIn(res.data.authenticated);
-        setUserRole(res.data.role);
+        console.log("Auth:", res);
+        // setIsLoggedIn(res.data.authenticated);
+        // setUserRole(res.data.role);
       } catch (err) {
         if (err.code === "ECONNABORTED") {
           console.log("Backend sleeping, retrying...");
@@ -70,9 +70,9 @@ const Navbar = () => {
       });
   };
 
-  useEffect(() => {
-    console.log("🔄 RENDER ->", { isLoggedIn, userRole });
-  }, [isLoggedIn, userRole]);
+  // useEffect(() => {
+  //   console.log("🔄 RENDER ->", { isLoggedIn, userRole });
+  // }, [isLoggedIn, userRole]);
 
   // Check auth when component loads
   // useEffect(() => {
