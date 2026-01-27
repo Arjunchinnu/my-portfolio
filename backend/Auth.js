@@ -50,20 +50,19 @@ router.post("/login", async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRY },
     );
+res.cookie("jwt", token, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",  // false local, true prod
+  sameSite: "lax",  // ✅ Change to "lax" (not "none")
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
+res.cookie("role", user.role, {
+  httpOnly: false,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",  // Match
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
 
-    res.cookie("jwt", token, {
-      httpOnly: true, // keep this true for security
-      secure: true, // ✅ must be true on HTTPS
-      sameSite: "none", // ✅ required for cross‑site cookies
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-
-    res.cookie("role", user.role, {
-      httpOnly: false, // frontend can read role
-      secure: true, // ✅ must be true on HTTPS
-      sameSite: "none", // ✅ required for cross‑site cookies
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
 
     // res.cookie("jwt", token, {
     //   httpOnly: true,

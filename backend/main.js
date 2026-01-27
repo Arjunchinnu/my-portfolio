@@ -29,7 +29,8 @@ const app = express();
 // Middleware
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://my-portfolio-frontend.onrender.com",
+  "https://my-portfolio-frontend.onrender.com", // Add your actual frontend URL
+  "https://my-portfolio-frontend-yz4e.onrender.com", // Keep if needed
 ];
 
 // app.use(
@@ -41,10 +42,16 @@ const allowedOrigins = [
 
 app.use(
   cors({
-    origin: "https://my-portfolio-frontend-yz4e.onrender.com",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
-    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"], // Add Content-Type
   }),
 );
 

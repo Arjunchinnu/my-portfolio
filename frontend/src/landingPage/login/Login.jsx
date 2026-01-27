@@ -16,21 +16,42 @@ const Login = () => {
     }));
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     let res = await axios.post(
+  //       "https://my-portfolio-backend-e8l7.onrender.com/user/login",
+  //       formData,
+  //       {
+  //         withCredentials: true,
+  //       },
+  //     );
+  //     console.log(res.data);
+  //     // window.location.href = "/";
+  //     navigate("/");
+  //   } catch (err) {
+  //     console.log("login page error", err);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      let res = await axios.post(
+      const res = await axios.post(
         "https://my-portfolio-backend-e8l7.onrender.com/user/login",
         formData,
         {
           withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
       );
-      console.log(res.data);
-      // window.location.href = "/";
+      console.log("Login success:", res.data);
       navigate("/");
     } catch (err) {
-      console.log("login page error", err);
+      console.error("Login error details:", err.response?.data || err.message);
+      // Add user feedback: alert(err.response?.data?.message || "Login failed");
     }
   };
 
