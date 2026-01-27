@@ -37,6 +37,7 @@ const PostData = ({ onProjectAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    const token = localStorage.getItem("jwt");
     //  Build FormData once here
     const data = new FormData();
     data.append("projectName", formData.projectName);
@@ -48,6 +49,7 @@ const PostData = ({ onProjectAdded }) => {
     await axios.post(
       "https://my-portfolio-backend-e8l7.onrender.com/postProject",
       data,
+      { headers: { Authorization: `Bearer ${token}` } },
     );
 
     setFormData({
@@ -153,7 +155,7 @@ const PostData = ({ onProjectAdded }) => {
               <button
                 className="btn btn-success"
                 type="submit"
-                onClick={afterSubmit}
+                onClick={handleSubmit}
               >
                 Submit form
               </button>
