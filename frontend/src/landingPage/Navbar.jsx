@@ -11,23 +11,50 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   // SIMPLE AUTH CHECK
-  const checkAuth = async () => {
-    try {
-      const res = await axios.get(
-        "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
-        {
-          withCredentials: true,
-        },
-      );
-      console.log("Auth:", res.data);
-      setIsLoggedIn(res.data.authenticated);
-      setUserRole(res.data.role);
-    } catch (err) {
-      console.error("Auth check failed:", err);
-      setIsLoggedIn(false);
-      setUserRole("user");
-    }
-  };
+  // const checkAuth = async () => {
+  //   try {
+  //     const res = await axios.get(
+  //       "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
+  //       {
+  //         withCredentials: true,
+  //       },
+  //     );
+  //     console.log("Auth:", res.data);
+  //     setIsLoggedIn(res.data.authenticated);
+  //     setUserRole(res.data.role);
+  //   } catch (err) {
+  //     console.error("Auth check failed:", err);
+  //     setIsLoggedIn(false);
+  //     setUserRole("user");
+  //   }
+  // };
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get(
+          "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
+          {
+            withCredentials: true,
+            timeout: 15000, // 15 seconds for Render wake-up
+          },
+        );
+        console.log("Auth:", res.data);
+        setIsLoggedIn(res.data.authenticated);
+        setUserRole(res.data.role);
+      } catch (err) {
+        if (err.code === "ECONNABORTED") {
+          console.log("Backend sleeping, retrying...");
+          setTimeout(checkAuth, 5000); // Retry in 5s
+        } else {
+          console.log("Not logged in");
+          setIsLoggedIn(false);
+          setUserRole("user");
+        }
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   const logout = () => {
     axios
@@ -48,9 +75,9 @@ const Navbar = () => {
   }, [isLoggedIn, userRole]);
 
   // Check auth when component loads
-  useEffect(() => {
-    checkAuth();
-  }, []);
+  // useEffect(() => {
+  //   checkAuth();
+  // }, []);
 
   // Sticky scroll
   useEffect(() => {
