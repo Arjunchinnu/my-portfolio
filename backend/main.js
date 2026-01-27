@@ -209,7 +209,7 @@ app.post("/logout", (req, res) => {
     secure: true, // or process.env.NODE_ENV === "production"
     sameSite: "none", // must match login
   });
-  res.cookie("role", user.role, {
+  res.cookie("role", {
     httpOnly: false,
     secure: false,
     sameSite: "lax",
