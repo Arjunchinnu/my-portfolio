@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -9,59 +9,51 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("user");
-  const [isLoading, setIsLoading] = useState(true); // ADD THIS
+  const [isLoading, setIsLoading] = useState(true); // ✅ FIXED
 
-  // const logout = async () => {
-  //   try {
-  //     await axios.post("/logout");
-  //     console.log("✅ Logout successful");
-  //   } catch (err) {
-  //     console.error("Logout failed:", err);
-  //   }
+  const checkAuth = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const res = await axios.get(
+        "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
+        {
+          withCredentials: true,
+        },
+      );
+      console.log("✅ Auth status:", res.data);
+      setIsLoggedIn(res.data.authenticated);
+      setUserRole(res.data.role || "user");
+    } catch (err) {
+      console.log("❌ Not logged in");
+      setIsLoggedIn(false);
+      setUserRole("user");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
-  //   Cookies.remove("role");
-  //   window.location.href = "/";
-  // };
   const logout = async () => {
     try {
-      const res = await axios.post(
+      await axios.post(
         "https://my-portfolio-backend-e8l7.onrender.com/logout",
         {},
-        { withCredentials: true },
+        {
+          withCredentials: true,
+        },
       );
-      console.log("✅ Logout successful:", res.data);
-      window.location.href = "/";
+      console.log("✅ Logout successful");
     } catch (err) {
-      console.error("Logout error:", err.response?.data || err.message);
+      console.error("Logout error:", err);
     }
+    window.location.href = "/";
   };
-  // Check login status on mountconst
 
+  // Check auth on mount AND expose for login callback
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const res = await axios.get(
-          "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
-          {
-            withCredentials: true,
-          },
-        );
-        console.log("✅ Auth status:", res.data);
-
-        setIsLoggedIn(res.data.authenticated);
-        setUserRole(res.data.role || "user");
-      } catch (err) {
-        console.log("❌ Not logged in");
-        setIsLoggedIn(false);
-        setUserRole("user");
-      } finally {
-        setIsLoading(false); // ADD THIS
-      }
-    };
     checkAuth();
-  }, []); // Keep empty deps
+  }, [checkAuth]);
 
-  // Sticky navbar scroll handler
+  // Sticky scroll handler
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > lastScrollY) {
@@ -71,14 +63,11 @@ const Navbar = () => {
       }
       setLastScrollY(window.scrollY);
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
 
-  const handleLogout = () => {
-    logout();
-  };
+  const handleLogout = () => logout();
 
   return (
     <nav className={`navbar navbar-expand-lg ${isSticky ? "sticky" : ""}`}>
@@ -92,7 +81,7 @@ const Navbar = () => {
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span class="navbar-toggler-icon"></span>
+          <span className="navbar-toggler-icon"></span>
         </button>
 
         <div
@@ -112,8 +101,9 @@ const Navbar = () => {
             <a className="nav-link" href="#portfolio">
               Portfolio
             </a>
+
             {isLoading ? (
-              <div className="nav-link">Loading...</div> // Show while checking
+              <div className="nav-link">Loading...</div>
             ) : isLoggedIn ? (
               <>
                 {userRole === "admin" && (
