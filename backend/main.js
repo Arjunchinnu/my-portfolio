@@ -11,6 +11,7 @@ const cloudinary = require("./Cloudinary");
 const authRoute = require("./Auth.js");
 const { auth, authorize } = require("./middleWare.js");
 const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 
 // Connect MongoDB
 const connectDB = async () => {
@@ -64,14 +65,32 @@ const upload = multer({ storage });
 
 app.get("/auth/check", (req, res) => {
   console.log("Auth check - Cookies:", req.cookies);
-  const authenticated = !!req.cookies.jwt; // TRUE if jwt exists
-  const role = req.cookies.role || "user";
 
-  res.json({
-    authenticated, // Now TRUE with jwt cookie
-    role,
-    cookies: req.cookies,
-  });
+  try {
+    const token = req.cookies.jwt;
+    let decoded = null;
+
+    if (token) {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    }
+
+    res.json({
+      authenticated: !!decoded, // ✅ TRUE only if token VALID
+      role: req.cookies.role || "user", // Fallback to cookie
+      validToken: !!decoded, // Debug token status
+      cookies: req.cookies,
+      userId: decoded?.id || null,
+    });
+  } catch (err) {
+    console.log("Token invalid:", err.message);
+    res.json({
+      authenticated: false,
+      role: req.cookies.role || "user",
+      validToken: false,
+      tokenError: err.message,
+      cookies: req.cookies,
+    });
+  }
 });
 
 //uploading project route

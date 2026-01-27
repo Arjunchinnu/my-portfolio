@@ -50,20 +50,24 @@ router.post("/login", async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRY },
     );
+
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: false, // ← FORCE FALSE for Render testing
-      sameSite: "lax", // ← CRITICAL
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000, // ✅ 1 day only
+      // Add these for reliability
+      path: "/",
+      sameSite: "lax",
     });
 
     res.cookie("role", user.role, {
       httpOnly: false,
-      secure: false, // ← FORCE FALSE
-      sameSite: "lax", // ← CRITICAL
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 24 * 60 * 60 * 1000, // ✅ Match JWT expiry
+      path: "/",
     });
-
     // res.cookie("jwt", token, {
     //   httpOnly: true,
     //   secure: false,
