@@ -109,10 +109,7 @@ web developer */
   margin: 0;
   padding: 3px 2rem;
 }
-.resume-btn {
-  /* display: flex;
-  justify-content: end; */
-}
+
 .portfolio-btn {
   display: flex;
   justify-content: start;
