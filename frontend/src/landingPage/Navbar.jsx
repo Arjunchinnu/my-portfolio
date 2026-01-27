@@ -21,23 +21,19 @@ const Navbar = () => {
   //   Cookies.remove("role");
   //   window.location.href = "/";
   // };
-
   const logout = async () => {
     try {
-      await axios.post(
+      const res = await axios.post(
         "https://my-portfolio-backend-e8l7.onrender.com/logout",
         {},
-        {
-          withCredentials: true,
-        },
+        { withCredentials: true },
       );
-      console.log("✅ Logout successful");
+      console.log("✅ Logout successful:", res.data);
+      window.location.href = "/";
     } catch (err) {
-      console.log("Logout error:", err);
+      console.error("Logout error:", err.response?.data || err.message);
     }
-    window.location.href = "/";
   };
-
   // Check login status on mount
   useEffect(() => {
     const checkAuth = async () => {

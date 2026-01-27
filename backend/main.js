@@ -181,13 +181,22 @@ app.delete("/delete/:id", async (req, res) => {
   }
 });
 
-app.post("/logout", auth, (req, res) => {
+// app.post("/logout", auth, (req, res) => {
+//   res.clearCookie("jwt", {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     sameSite: "strict",
+//   });
+
+//   res.status(200).json({ message: "Logged out successfully" });
+// });
+
+app.post("/logout", (req, res) => {
   res.clearCookie("jwt", {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
+    secure: true, // or process.env.NODE_ENV === "production"
+    sameSite: "none", // must match login
   });
-
   res.status(200).json({ message: "Logged out successfully" });
 });
 
