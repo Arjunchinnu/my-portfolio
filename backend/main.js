@@ -223,18 +223,22 @@ app.delete("/delete/:id", async (req, res) => {
 // });
 
 app.post("/logout", (req, res) => {
+  // Clear JWT cookie
   res.clearCookie("jwt", {
     httpOnly: true,
-    secure: true, // or process.env.NODE_ENV === "production"
-    sameSite: "none", // must match login
-  });
-  res.cookie("role", {
-    httpOnly: false,
-    secure: false,
+    secure: false, // match login
     sameSite: "lax",
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    path: "/", // must match login
   });
+
+  // Clear role cookie
+  res.clearCookie("role", {
+    httpOnly: false,
+    secure: false, // match login
+    sameSite: "lax",
+    path: "/", // must match login
+  });
+
   res.status(200).json({ message: "Logged out successfully" });
 });
-
 module.exports = app;
