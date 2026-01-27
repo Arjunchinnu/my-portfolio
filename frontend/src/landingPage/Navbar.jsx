@@ -7,40 +7,47 @@ const Navbar = () => {
   const [userRole, setUserRole] = useState("user");
   const [isSticky, setIsSticky] = useState(false);
 
-  // 🔥 FIXED AUTH CHECK - Uses localStorage + Authorization header
+  // 🔥 CHECK LOCALSTORAGE IMMEDIATELY + Backend verification
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Get token from localStorage
+        // 1. IMMEDIATE localStorage check
         const token = localStorage.getItem("jwt");
-        const storedRole = localStorage.getItem("role");
+        const storedRole = localStorage.getItem("role") || "user";
 
-        // Set initial state from localStorage
-        if (token && storedRole) {
+        console.log("🔍 Navbar localStorage:", {
+          token: !!token,
+          role: storedRole,
+        });
+
+        // 2. Set state immediately from localStorage
+        if (token) {
           setIsLoggedIn(true);
           setUserRole(storedRole);
         }
 
-        // Verify with backend
-        const res = await axios.get(
-          "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
-          {
-            headers: {
-              Authorization: token ? `Bearer ${token}` : "",
+        // 3. Verify token with backend
+        if (token) {
+          const res = await axios.get(
+            "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              timeout: 10000,
             },
-            timeout: 15000,
-          },
-        );
+          );
 
-        console.log("✅ Auth response:", res.data);
-        setIsLoggedIn(res.data.authenticated);
-        setUserRole(res.data.role);
+          console.log("✅ Backend auth response:", res.data);
+          setIsLoggedIn(res.data.authenticated);
+          setUserRole(res.data.role);
+        }
       } catch (err) {
         console.error(
           "❌ Auth check failed:",
           err.response?.data || err.message,
         );
-        // Keep localStorage state as fallback
+        // Fallback to localStorage
         const token = localStorage.getItem("jwt");
         const role = localStorage.getItem("role") || "user";
         setIsLoggedIn(!!token);
@@ -49,11 +56,68 @@ const Navbar = () => {
     };
 
     checkAuth();
+  }, []); // Runs once on mount
+
+  // 🔥 WATCH FOR LOCALSTORAGE CHANGES (login from other tabs)
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === "jwt" || e.key === "role") {
+        const token = localStorage.getItem("jwt");
+        const role = localStorage.getItem("role") || "user";
+
+        console.log("🔄 Storage changed:", { token: !!token, role });
+
+        setIsLoggedIn(!!token);
+        setUserRole(role);
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  // 🔥 FIXED LOGOUT - Clears localStorage
+  // 🔥 TOKEN VALIDATION INTERVAL (every 30s)
+  useEffect(() => {
+    if (!isLoggedIn) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const token = localStorage.getItem("jwt");
+        if (!token) {
+          setIsLoggedIn(false);
+          setUserRole("user");
+          return;
+        }
+
+        const res = await axios.get(
+          "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+            timeout: 5000,
+          },
+        );
+
+        if (!res.data.authenticated) {
+          localStorage.removeItem("jwt");
+          localStorage.removeItem("role");
+          setIsLoggedIn(false);
+          setUserRole("user");
+        }
+      } catch (err) {
+        console.log("❌ Token expired, auto-logout");
+        localStorage.removeItem("jwt");
+        localStorage.removeItem("role");
+        setIsLoggedIn(false);
+        setUserRole("user");
+      }
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [isLoggedIn]);
+
+  // 🔥 PERFECT LOGOUT
   const logout = () => {
-    // Clear localStorage
+    // Clear localStorage FIRST
     localStorage.removeItem("jwt");
     localStorage.removeItem("role");
 
@@ -61,15 +125,14 @@ const Navbar = () => {
     setIsLoggedIn(false);
     setUserRole("user");
 
-    // Optional backend cleanup
+    // Backend cleanup (fire and forget)
+    const token = localStorage.getItem("jwt"); // Already cleared
     axios
       .post(
         "https://my-portfolio-backend-e8l7.onrender.com/logout",
         {},
         {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         },
       )
       .catch(() => {}); // Ignore errors
@@ -77,7 +140,7 @@ const Navbar = () => {
     window.location.href = "/";
   };
 
-  // Sticky scroll effect
+  // Sticky scroll
   useEffect(() => {
     const handleScroll = () => {
       setIsSticky(window.scrollY > 50);
