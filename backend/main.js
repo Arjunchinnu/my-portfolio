@@ -29,8 +29,7 @@ const app = express();
 // Middleware
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://my-portfolio-frontend.onrender.com", // Add your actual frontend URL
-  "https://my-portfolio-frontend-yz4e.onrender.com", // Keep if needed
+  "https://my-portfolio-frontend-yz4e.onrender.com", // ← EXACT frontend URL
 ];
 
 // app.use(
@@ -52,6 +51,7 @@ app.use(
     credentials: true,
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"], // Add Content-Type
+    optionsSuccessStatus: 200,
   }),
 );
 
