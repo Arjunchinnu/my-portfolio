@@ -1,73 +1,63 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
 axios.defaults.withCredentials = true;
 
 const Navbar = () => {
-  const [isSticky, setIsSticky] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("user");
-  const [isLoading, setIsLoading] = useState(true); // ✅ FIXED
+  const [isSticky, setIsSticky] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
-  const checkAuth = useCallback(async () => {
-    try {
-      setIsLoading(true);
-      const res = await axios.get(
-        "https://my-portfolio-backend-e8l7.onrender.com/auth/check",
-        {
-          withCredentials: true,
-        },
-      );
-      console.log("✅ Auth status:", res.data);
-      setIsLoggedIn(res.data.authenticated);
-      setUserRole(res.data.role || "user");
-    } catch (err) {
-      console.log("❌ Not logged in", err);
-      setIsLoggedIn(false);
-      setUserRole("user");
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  // SIMPLE AUTH CHECK
+  const checkAuth = () => {
+    axios
+      .get("https://my-portfolio-backend-e8l7.onrender.com/auth/check", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log("Auth:", res.data);
+        setIsLoggedIn(res.data.authenticated);
+        setUserRole(res.data.role);
+      })
+      .catch(() => {
+        setIsLoggedIn(false);
+        setUserRole("user");
+      });
+  };
 
-  const logout = async () => {
-    try {
-      await axios.post(
+  const logout = () => {
+    axios
+      .post(
         "https://my-portfolio-backend-e8l7.onrender.com/logout",
         {},
         {
           withCredentials: true,
         },
-      );
-      console.log("✅ Logout successful");
-    } catch (err) {
-      console.error("Logout error:", err);
-    }
-    window.location.href = "/";
+      )
+      .then(() => {
+        window.location.href = "/";
+      });
   };
 
-  // Check auth on mount AND expose for login callback
+  useEffect(() => {
+    console.log("🔄 RENDER ->", { isLoggedIn, userRole });
+  }, [isLoggedIn, userRole]);
+
+  // Check auth when component loads
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+  }, []);
 
-  // Sticky scroll handler
+  // Sticky scroll
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY) {
-        setIsSticky(false);
-      } else {
-        setIsSticky(true);
-      }
-      setLastScrollY(window.scrollY);
+      setIsSticky(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
-
-  const handleLogout = () => logout();
+  }, []);
 
   return (
     <nav className={`navbar navbar-expand-lg ${isSticky ? "sticky" : ""}`}>
@@ -77,19 +67,13 @@ const Navbar = () => {
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div
-          className="collapse navbar-collapse nav-items-div"
-          id="navbarNavAltMarkup"
-        >
-          <div className={`navbar-nav ${isSticky ? "" : "sticky"}`}>
-            <a className="nav-link active homelink" href="#home">
+        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+          <div className="navbar-nav">
+            <a className="nav-link active" href="#home">
               Home
             </a>
             <a className="nav-link" href="#about">
@@ -102,9 +86,7 @@ const Navbar = () => {
               Portfolio
             </a>
 
-            {isLoading ? (
-              <div className="nav-link">Loading...</div>
-            ) : isLoggedIn ? (
+            {isLoggedIn ? (
               <>
                 {userRole === "admin" && (
                   <a className="nav-link" href="#form">
@@ -112,7 +94,7 @@ const Navbar = () => {
                   </a>
                 )}
                 <button
-                  onClick={handleLogout}
+                  onClick={logout}
                   className="nav-link btn"
                   style={{
                     color: "black",

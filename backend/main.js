@@ -1,121 +1,203 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { Link } from "react-router-dom";
+const express = require("express");
+const dotenv = require("dotenv");
+dotenv.config();
 
-axios.defaults.withCredentials = true;
+const mongoose = require("mongoose");
+const Project = require("./Schema/ProjectSchema");
+const cors = require("cors");
+const multer = require("multer");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("./Cloudinary");
+const authRoute = require("./Auth.js");
+const { auth, authorize } = require("./middleWare.js");
+const cookieParser = require("cookie-parser");
 
-const Navbar = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState("user");
-  const [isSticky, setIsSticky] = useState(false);
-  const [lastScrollY, setLastScrollY] = useState(0);
-
-  // SIMPLE AUTH CHECK
-  const checkAuth = () => {
-    axios
-      .get("https://my-portfolio-backend-e8l7.onrender.com/auth/check", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log("Auth:", res.data);
-        setIsLoggedIn(res.data.authenticated);
-        setUserRole(res.data.role);
-      })
-      .catch(() => {
-        setIsLoggedIn(false);
-        setUserRole("user");
-      });
-  };
-
-  const logout = () => {
-    axios
-      .post(
-        "https://my-portfolio-backend-e8l7.onrender.com/logout",
-        {},
-        {
-          withCredentials: true,
-        },
-      )
-      .then(() => {
-        window.location.href = "/";
-      });
-  };
-
-  useEffect(() => {
-    console.log("🔄 RENDER ->", { isLoggedIn, userRole });
-  }, [isLoggedIn, userRole]);
-
-  // Check auth when component loads
-  useEffect(() => {
-    checkAuth();
-  }, []);
-
-  // Sticky scroll
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsSticky(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  return (
-    <nav className={`navbar navbar-expand-lg ${isSticky ? "sticky" : ""}`}>
-      <div className="container-fluid">
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavAltMarkup"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div className="navbar-nav">
-            <a className="nav-link active" href="#home">
-              Home
-            </a>
-            <a className="nav-link" href="#about">
-              About
-            </a>
-            <a className="nav-link" href="#resume">
-              Resume
-            </a>
-            <a className="nav-link" href="#portfolio">
-              Portfolio
-            </a>
-
-            {isLoggedIn ? (
-              <>
-                {userRole === "admin" && (
-                  <a className="nav-link" href="#form">
-                    Add Project
-                  </a>
-                )}
-                <button
-                  onClick={logout}
-                  className="nav-link btn"
-                  style={{
-                    color: "black",
-                    border: "none",
-                    background: "none",
-                    cursor: "pointer",
-                  }}
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <Link className="nav-link" to="/user/login">
-                Login
-              </Link>
-            )}
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
+// Connect MongoDB
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(process.env.MONGO_URI);
+    console.log(` MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error(` Error: ${error.message}`);
+    process.exit(1);
+  }
 };
+connectDB();
 
-export default Navbar;
+const app = express();
+
+// Middleware
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://my-portfolio-frontend-yz4e.onrender.com",
+    ],
+    credentials: true,
+  }),
+);
+
+app.use(express.json());
+app.use(cookieParser());
+app.use("/user", authRoute);
+
+// Cloudinary storage config
+const storage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: "portfolio", // Cloudinary folder
+    allowed_formats: ["jpg", "png", "jpeg", "webp"],
+  },
+});
+
+const upload = multer({ storage });
+
+app.get("/auth/check", (req, res) => {
+  console.log("Auth check - Cookies:", req.cookies);
+  res.json({
+    authenticated: !!req.cookies.jwt, // ← ADD THIS
+    role: req.cookies.role || "user", // ← ADD THIS
+    cookies: req.cookies, // Keep for debug
+  });
+});
+
+//uploading project route
+app.post("/postProject", (req, res) => {
+  upload.single("image")(req, res, async (err) => {
+    try {
+      // console.log("posting route detected");
+      // console.log("posted data:", req.body);
+      // console.log("uploaded file:", req.file);
+
+      if (!req.file) {
+        return res.status(400).json({ message: "Image not received" });
+      }
+
+      const { projectName, projectDescription, technoUsed, projectUrl } =
+        req.body;
+
+      const project = new Project({
+        projectName,
+        projectDescription,
+        technoUsed,
+        projectUrl,
+        image: req.file.path,
+      });
+
+      await project.save();
+
+      res.status(201).json({
+        message: "data posted",
+        data: project,
+      });
+    } catch (err) {
+      console.error("SERVER ERROR:", err);
+      res.status(500).json({
+        message: "Server error",
+        error: err.message,
+      });
+    }
+  });
+});
+
+app.get("/displayProjects", async (req, res) => {
+  try {
+    let projects = await Project.find({});
+    res.status(200).json({
+      data: projects,
+    });
+  } catch (err) {
+    console.error("Error fetching projects:", err);
+    res.status(500).json({ error: "Server error while fetching projects" });
+  }
+});
+
+app.get("/edit/:id", async (req, res) => {
+  try {
+    let { id } = req.params;
+
+    let project = await Project.findOne({ _id: id });
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    res.status(200).json({ data: project });
+  } catch (err) {
+    console.log("error in edit ", err);
+  }
+});
+
+app.put("/edit/:id", upload.single("image"), async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedProject = req.body;
+    // console.log("Updating id:", id);
+    // console.log("Updated data:", updatedProject);
+
+    let updatedData = {
+      projectName: updatedProject.projectName,
+      projectDescription: updatedProject.projectDescription,
+      technoUsed: updatedProject.technoUsed,
+      projectUrl: updatedProject.projectUrl,
+    };
+
+    if (req.file) {
+      updatedData.image = req.file.path;
+    } else if (req.body.image) {
+      updatedData.image = req.body.image;
+    }
+
+    const project = await Project.findByIdAndUpdate(id, updatedData, {
+      new: true,
+    });
+
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
+    }
+
+    res.status(200).json({ data: project });
+  } catch (err) {
+    console.log("error in updating", err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+app.delete("/delete/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    let deletedProject = await Project.findByIdAndDelete(id);
+
+    if (!deletedProject) {
+      res.status(404).json({ message: "project not found" });
+    }
+    res
+      .status(200)
+      .json({ message: "Project deleted successfully", deletedProject });
+  } catch (err) {
+    console.log("error in deleting", err);
+    res.status(500).json({ message: err });
+  }
+});
+
+// app.post("/logout", auth, (req, res) => {
+//   res.clearCookie("jwt", {
+//     httpOnly: true,
+//     secure: process.env.NODE_ENV === "production",
+//     sameSite: "strict",
+//   });
+
+//   res.status(200).json({ message: "Logged out successfully" });
+// });
+
+app.post("/logout", (req, res) => {
+  res.clearCookie("jwt", {
+    httpOnly: true,
+    secure: true, // or process.env.NODE_ENV === "production"
+    sameSite: "none", // must match login
+  });
+  res.status(200).json({ message: "Logged out successfully" });
+});
+
+module.exports = app;
