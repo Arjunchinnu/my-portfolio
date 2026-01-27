@@ -48,9 +48,6 @@ const PostData = ({ onProjectAdded }) => {
     await axios.post(
       "https://my-portfolio-backend-e8l7.onrender.com/postProject",
       data,
-      {
-        headers: { Authorization: `Bearer ${localStorage.getItem("jwt")}` },
-      },
     );
 
     setFormData({
