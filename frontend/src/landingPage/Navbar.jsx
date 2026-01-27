@@ -49,6 +49,7 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+  console.log(isLoggedIn, userRole);
 
   return (
     <nav className={`navbar navbar-expand-lg ${isSticky ? "sticky" : ""}`}>
@@ -59,7 +60,10 @@ const Navbar = () => {
           data-bs-toggle="collapse"
           data-bs-target="#navbarNavAltMarkup"
         >
-          <span className="navbar-toggler-icon"></span>
+          <span
+            className="navbar-toggler-icon "
+            style={{ color: "white" }}
+          ></span>
         </button>
 
         <div className="collapse navbar-collapse" id="navbarNavAltMarkup">

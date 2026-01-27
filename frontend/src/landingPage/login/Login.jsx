@@ -34,7 +34,7 @@ const Login = () => {
       localStorage.setItem("jwt", res.data.token);
       localStorage.setItem("role", res.data.user.role);
 
-      navigate("/", { replace: true });
+      window.location.href = "/";
     } catch (err) {
       console.error("❌ Login error:", err.response?.data || err.message);
       alert(err.response?.data?.message || "Login failed");
