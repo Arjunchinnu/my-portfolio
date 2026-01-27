@@ -41,6 +41,10 @@ const Navbar = () => {
       });
   };
 
+  useEffect(() => {
+    console.log("🔄 RENDER ->", { isLoggedIn, userRole });
+  }, [isLoggedIn, userRole]);
+
   // Check auth when component loads
   useEffect(() => {
     checkAuth();
