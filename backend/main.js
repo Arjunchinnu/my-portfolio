@@ -64,7 +64,6 @@ const upload = multer({ storage });
 
 app.get("/auth/check", (req, res) => {
   console.log("Auth check - Cookies:", req.cookies);
-
   const authenticated = !!req.cookies.jwt; // TRUE if jwt exists
   const role = req.cookies.role || "user";
 
@@ -209,6 +208,12 @@ app.post("/logout", (req, res) => {
     httpOnly: true,
     secure: true, // or process.env.NODE_ENV === "production"
     sameSite: "none", // must match login
+  });
+  res.cookie("role", user.role, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
   res.status(200).json({ message: "Logged out successfully" });
 });
