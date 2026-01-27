@@ -57,11 +57,15 @@ const EditForm = () => {
     data.append("image", formData.image);
 
     try {
-      await axios.put(`http://localhost:5000/edit/${projectId}`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
+      await axios.put(
+        `https://my-portfolio-backend-e8l7.onrender.com/edit/${projectId}`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
+      );
 
       navigate("/#portfolio");
       window.location.reload();
