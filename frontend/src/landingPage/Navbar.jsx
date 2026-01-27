@@ -9,6 +9,7 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("user");
+  [isLoading, setIsLoading] = useState(true); // ADD THIS
 
   // const logout = async () => {
   //   try {
@@ -34,7 +35,8 @@ const Navbar = () => {
       console.error("Logout error:", err.response?.data || err.message);
     }
   };
-  // Check login status on mount
+  // Check login status on mountconst
+
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -48,17 +50,16 @@ const Navbar = () => {
 
         setIsLoggedIn(res.data.authenticated);
         setUserRole(res.data.role || "user");
-        console.log("login", isLoggedIn);
-        console.log("checking role", userRole);
       } catch (err) {
-        console.log("❌ Not logged in", err);
+        console.log("❌ Not logged in");
         setIsLoggedIn(false);
         setUserRole("user");
+      } finally {
+        setIsLoading(false); // ADD THIS
       }
     };
-
     checkAuth();
-  }, []);
+  }, []); // Keep empty deps
 
   // Sticky navbar scroll handler
   useEffect(() => {
@@ -111,7 +112,9 @@ const Navbar = () => {
             <a className="nav-link" href="#portfolio">
               Portfolio
             </a>
-            {isLoggedIn ? (
+            {isLoading ? (
+              <div className="nav-link">Loading...</div> // Show while checking
+            ) : isLoggedIn ? (
               <>
                 {userRole === "admin" && (
                   <a className="nav-link" href="#form">

@@ -48,6 +48,7 @@ const Login = () => {
         },
       );
       console.log("Login success:", res.data);
+      window.location = "/";
       navigate("/");
     } catch (err) {
       console.error("Login error details:", err.response?.data || err.message);
