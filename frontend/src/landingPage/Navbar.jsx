@@ -25,12 +25,25 @@ const Navbar = () => {
 
   // Check login status on mount
   useEffect(() => {
-    const role = Cookies.get("role");
-    const jwt = Cookies.get("jwt");
-    console.log("Role cookie:", role);
-    console.log("jwt cookie:", jwt);
-    setIsLoggedIn(!!role);
-    if (role) setUserRole(role);
+    const checkAuth = async () => {
+      try {
+        const res = await axios.get(
+          "https://my-portfolio-backend-e8l7.onrender.com/user/login",
+          {
+            withCredentials: true,
+          },
+        );
+        console.log("Auth check:", res.data);
+        if (res.data.cookies?.jwt && res.data.cookies?.role) {
+          setIsLoggedIn(true);
+          setUserRole(res.data.cookies.role);
+        }
+      } catch (err) {
+        console.log("Not logged in", err);
+        setIsLoggedIn(false);
+      }
+    };
+    checkAuth();
   }, []);
 
   // Sticky navbar scroll handler
