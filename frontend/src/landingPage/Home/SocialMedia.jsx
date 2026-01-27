@@ -14,7 +14,7 @@ const SocialMedia = () => {
           <i className="fab fa-linkedin-in"></i>
         </a>
         <a href="mailto:arjunchinnu604@gmail.com.com?subject=Hi&body=Message">
-          <i className="fa-envelope"></i>
+          <i class="fa-solid fa-envelope"></i>
         </a>
       </div>
     </>
