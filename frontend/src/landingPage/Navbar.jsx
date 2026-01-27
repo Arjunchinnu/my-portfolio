@@ -9,7 +9,7 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState("user");
-  [isLoading, setIsLoading] = useState(true); // ADD THIS
+  const [isLoading, setIsLoading] = useState(true); // ADD THIS
 
   // const logout = async () => {
   //   try {
