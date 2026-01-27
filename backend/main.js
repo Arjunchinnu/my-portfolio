@@ -54,14 +54,11 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 app.get("/auth/check", (req, res) => {
-  console.log("Auth check - Cookies:", req.cookies); // Render logs
-  const isAuthenticated = !!req.cookies.jwt;
-  const userRole = req.cookies.role || "user";
-
+  console.log("Auth check - Cookies:", req.cookies);
   res.json({
-    authenticated: isAuthenticated,
-    role: userRole,
-    cookies: req.cookies, // For debugging
+    authenticated: !!req.cookies.jwt, // ← ADD THIS
+    role: req.cookies.role || "user", // ← ADD THIS
+    cookies: req.cookies, // Keep for debug
   });
 });
 

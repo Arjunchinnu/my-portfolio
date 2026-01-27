@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
@@ -26,14 +25,15 @@ const Navbar = () => {
   const logout = async () => {
     try {
       await axios.post(
-        "/logout",
+        "https://my-portfolio-backend-e8l7.onrender.com/logout",
         {},
         {
           withCredentials: true,
         },
       );
+      console.log("✅ Logout successful");
     } catch (err) {
-      console.log("login error", err);
+      console.log("Logout error:", err);
     }
     window.location.href = "/";
   };
@@ -52,6 +52,8 @@ const Navbar = () => {
 
         setIsLoggedIn(res.data.authenticated);
         setUserRole(res.data.role || "user");
+        console.log("login", isLoggedIn);
+        console.log("checking role", userRole);
       } catch (err) {
         console.log("❌ Not logged in", err);
         setIsLoggedIn(false);
