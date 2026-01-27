@@ -87,6 +87,21 @@ web developer */
   max-width: 45%;
 }
 
+.cursor {
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
 /* .type-writer h1,
 .type-writer h2 {
   margin-inline: auto;
@@ -98,7 +113,7 @@ web developer */
     blink 1s step-end infinite,
     removeCursor 0.1s forwards 4s;
 } */
-.type-writer h3 {
+/* .type-writer h3 {
   margin-inline: auto;
   overflow: hidden;
   white-space: nowrap;
@@ -106,25 +121,23 @@ web developer */
   animation:
     typing 3s steps(18) infinite,
     blink 1s step-end infinite;
-}
+} */
 
-@keyframes typing {
+/* @keyframes typing {
   from {
     width: 0%;
   }
   to {
     width: 100%;
   }
-}
-
+} */
+/* 
 @keyframes blink {
   50% {
     border-color: transparent;
   }
 
-  /* 100% {
-    border-color: transparent;
-  } */
+ 
 }
 @keyframes removeCursor {
   to {
@@ -132,21 +145,9 @@ web developer */
   }
 }
 
-/* .hero {
-  background-image: url("./assets/hero1.png");
-  background-size: cover;
-  background-position: center;
-  height: 100vh;
-  width: 100vw;
-} */
-/* .hero-data {
-  display: flex;
-  justify-content: start;
-} */
-
 .hero {
   height: 100vh;
-}
+} */
 
 .hero-btn {
   font-size: 12px;
@@ -192,15 +193,11 @@ web developer */
   font-size: 1.8rem !important; /* Keep if needed */
 }
 
- 
-
-
-
 /* Mobile phones */
 @media (max-width: 576px) {
   .container {
     flex-direction: column;
-    font-size: 14px;
+    /* font-size: 14px; */
   }
 }
 
@@ -213,13 +210,16 @@ web developer */
     font-size: 2rem;
   }
   .type-writer .heading3 {
-    max-width: 51%;
+    max-width: 100%;
   }
-  .hero-btns {
+  .type-writer .heading3 .hero-subtitle {
+    font-size: 12px;
+  }
+  /* .hero-btns {
     display: flex;
     font-size: 1rem;
     gap: 1rem;
-  }
+  } */
 }
 
 @media (max-width: 992px) {
@@ -232,58 +232,8 @@ web developer */
   .type-writer .heading3 {
     max-width: 51%;
   }
-  .hero-btns {
+  /* .hero-btns {
     display: flex;
     gap: 1rem;
-  }
+  } */
 }
-/* 
-.hero-small-name {
-  font-weight: 300; 
-  letter-spacing: 0.3rem;
-  margin: 0;
-}
-
-.hero-main-name {
-  font-weight: 800; 
-  font-size: 3rem;
-  letter-spacing: 0.3rem;
-}
-
-.hero-subtitle {
-  font-weight: 400;
-  font-size: 0.9rem;
-  letter-spacing: 0.34rem;
-  text-transform: uppercase;
-} */
-
-/* Small laptops */
-/* @media (max-width: 992px) {
-  .type-writer .heading1 {
-    max-width: 40%;
-  }
-  .type-writer .heading2 {
-    max-width: 100%;
-    letter-spacing: 0.2rem;
-    font-weight: 100;
-  }
-  .type-writer .heading1 .hero-main-name {
-    font-size: 2rem;
-  }
-} */
-
-/* .type-writer .heading1 {
-  display: flex;
-  justify-content: start;
-  max-width: 28%;
-}
-.type-writer .heading2 {
-  display: flex;
-  justify-content: start;
-  max-width: 90%;
-}
-
-.type-writer .heading3 {
-  display: flex;
-  max-width: 45%;
-} */

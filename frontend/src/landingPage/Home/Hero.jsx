@@ -1,5 +1,6 @@
 import React from "react";
 import SocialMedia from "./SocialMedia";
+import WebdevTitle from "./WebdevTitle";
 
 const Hero = () => {
   return (
@@ -22,26 +23,30 @@ const Hero = () => {
                 </h2>
               </div>
               <div className="heading3">
-                <h3 className="hero-subtitle" style={{ color: "white" }}>
-                  Web Developer
-                </h3>
+                <h2 className="hero-subtitle fw-light display-6 display-md-5 display-sm-4 text-white">
+                  <WebdevTitle />
+                </h2>
               </div>
             </div>
           </div>
           <div className="row mt-5 px-5 hero-btns">
-            <div className="col-lg-1 resume-btn px-4">
-              <a href="#resume">
-                <button className="btn hero-btn btn-outline-light">
+            <div className="col-6">
+              <div className="d-flex flex-column flex-sm-row gap-3 justify-content-center justify-content-md-start">
+                <a
+                  href="#resume"
+                  className="btn btn-outline-light hero-btn flex-fill flex-sm-auto col-5 col-md-2"
+                  style={{ minWidth: "120px" }}
+                >
                   Resume
-                </button>
-              </a>
-            </div>
-            <div className="col-lg-1   portfolio-btn">
-              <a href="#portfolio">
-                <button className="btn hero-btn btn-outline-light">
-                  portfolio
-                </button>
-              </a>
+                </a>
+                <a
+                  href="#portfolio"
+                  className="btn btn-outline-light hero-btn flex-fill flex-sm-auto col-5 col-md-2"
+                  style={{ minWidth: "120px" }}
+                >
+                  Portfolio
+                </a>
+              </div>
             </div>
           </div>
           <SocialMedia />
