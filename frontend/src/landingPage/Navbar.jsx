@@ -32,7 +32,6 @@ const Navbar = () => {
           setIsLoggedIn(!!token); // Fallback
           setUserRole(role);
         });
-      console.log(isLoggedIn, userRole);
     }
   }, []);
 

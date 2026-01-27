@@ -54,14 +54,6 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
-// app.get("/auth/check", (req, res) => {
-//   console.log("Auth check - Cookies:", req.cookies);
-//   res.json({
-//     authenticated: !!req.cookies.jwt, // ← ADD THIS
-//     role: req.cookies.role || "user", // ← ADD THIS
-//     cookies: req.cookies, // Keep for debug
-//   });
-// });app.get("/auth/check", (req, res) => {
 
 app.get("/auth/check", (req, res) => {
   try {
@@ -92,9 +84,6 @@ app.get("/auth/check", (req, res) => {
 app.post("/postProject", (req, res) => {
   upload.single("image")(req, res, async (err) => {
     try {
-      // console.log("posting route detected");
-      // console.log("posted data:", req.body);
-      // console.log("uploaded file:", req.file);
 
       if (!req.file) {
         return res.status(400).json({ message: "Image not received" });
@@ -159,9 +148,7 @@ app.put("/edit/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
     const updatedProject = req.body;
-    // console.log("Updating id:", id);
-    // console.log("Updated data:", updatedProject);
-
+  
     let updatedData = {
       projectName: updatedProject.projectName,
       projectDescription: updatedProject.projectDescription,
@@ -207,15 +194,7 @@ app.delete("/delete/:id", async (req, res) => {
   }
 });
 
-// app.post("/logout", auth, (req, res) => {
-//   res.clearCookie("jwt", {
-//     httpOnly: true,
-//     secure: process.env.NODE_ENV === "production",
-//     sameSite: "strict",
-//   });
 
-//   res.status(200).json({ message: "Logged out successfully" });
-// });
 app.post("/logout", (req, res) => {
   res.status(200).json({
     message: "Logged out successfully",

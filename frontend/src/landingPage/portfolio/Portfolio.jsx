@@ -8,12 +8,6 @@ import "./portfolio.css";
 
 const Portfolio = ({ data, setData }) => {
   
-  // useEffect(() => {
-  //   const el = document.getElementById("portfolio");
-  //   if (el) {
-  //     el.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // }, []);
 
   return (
     <>

@@ -15,7 +15,6 @@ const PostData = ({ onProjectAdded }) => {
     image: null,
   });
 
-  // const navigate = useNavigate();
 
   // handle input changes
   const handleChange = (e) => {

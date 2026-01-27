@@ -29,7 +29,6 @@ const Login = () => {
         },
       );
 
-      console.log("✅ Login success:", res.data);
 
       localStorage.setItem("jwt", res.data.token);
       localStorage.setItem("role", res.data.user.role);
