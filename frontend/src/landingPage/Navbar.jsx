@@ -12,7 +12,6 @@ const Navbar = () => {
     const token = localStorage.getItem("jwt");
     const role = localStorage.getItem("role") || "user";
 
-    console.log("🔍 Navbar auth:", { token: !!token, role });
 
     if (token) {
       setIsLoggedIn(true);

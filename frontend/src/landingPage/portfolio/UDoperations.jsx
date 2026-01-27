@@ -11,7 +11,6 @@ const UDoperations = ({ id, onDelete }) => {
   useEffect(() => {
     const token = localStorage.getItem("jwt");
     const role = localStorage.getItem("role") || "user";
-    console.log("portfolio btn auth", { token: !!token, role });
 
     if (token) {
       setIsLoggedIn(true);

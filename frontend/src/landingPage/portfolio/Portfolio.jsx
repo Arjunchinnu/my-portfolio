@@ -3,7 +3,6 @@ import "./portfolio.css";
 import { motion } from "framer-motion";
 
 import UDoperations from "./UDoperations";
-import { Routes, Route } from "react-router-dom";
 import "./portfolio.css";
 
 const Portfolio = ({ data, setData }) => {
