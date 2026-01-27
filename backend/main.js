@@ -32,12 +32,22 @@ const allowedOrigins = [
   "https://my-portfolio-frontend.onrender.com",
 ];
 
+// app.use(
+//   cors({
+//     origin: "https://my-portfolio-frontend-yz4e.onrender.com",
+//     credentials: true,
+//   }),
+// );
+
 app.use(
   cors({
     origin: "https://my-portfolio-frontend-yz4e.onrender.com",
     credentials: true,
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
+
 app.use(express.json());
 app.use(cookieParser());
 app.use("/user", authRoute);
