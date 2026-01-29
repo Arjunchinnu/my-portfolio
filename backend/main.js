@@ -116,7 +116,12 @@ app.post("/postProject", (req, res) => {
 
 app.get("/displayProjects", async (req, res) => {
   try {
-    let projects = await Project.find({}).sort({ createdAt: -1 });
+        let projects = await Project.find({}).sort({ _id: -1 });  // ⭐ MOST RELIABLE
+    // let projects = await Project.find({}).sort({ createdAt: -1 });
+    // let projects = await Project.find({}).sort({ updatedAt: -1 });
+    
+    console.log(`📊 Found ${projects.length} projects`);
+    console.log("🔍 Newest:", projects[0]?.title);
     res.status(200).json({
       data: projects,
     });
