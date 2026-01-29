@@ -54,7 +54,6 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
-
 app.get("/auth/check", (req, res) => {
   try {
     const token = req.cookies.jwt || req.headers.authorization?.split(" ")[1];
@@ -84,7 +83,6 @@ app.get("/auth/check", (req, res) => {
 app.post("/postProject", (req, res) => {
   upload.single("image")(req, res, async (err) => {
     try {
-
       if (!req.file) {
         return res.status(400).json({ message: "Image not received" });
       }
@@ -118,7 +116,7 @@ app.post("/postProject", (req, res) => {
 
 app.get("/displayProjects", async (req, res) => {
   try {
-    let projects = await Project.find({});
+    let projects = await Project.find({}).sort({ createdAt: -1 });
     res.status(200).json({
       data: projects,
     });
@@ -148,7 +146,7 @@ app.put("/edit/:id", upload.single("image"), async (req, res) => {
   try {
     const { id } = req.params;
     const updatedProject = req.body;
-  
+
     let updatedData = {
       projectName: updatedProject.projectName,
       projectDescription: updatedProject.projectDescription,
@@ -193,7 +191,6 @@ app.delete("/delete/:id", async (req, res) => {
     res.status(500).json({ message: err });
   }
 });
-
 
 app.post("/logout", (req, res) => {
   res.status(200).json({
